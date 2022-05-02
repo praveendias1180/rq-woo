@@ -14,3 +14,24 @@
  * Text Domain:       rq-woo
  * Domain Path:       /languages
  */
+
+global $rq_variations;
+
+add_action( 'woocommerce_before_single_product', 'rq_before_single_product', 10 );
+add_action( 'woocommerce_before_variations_form', 'rq_before_variations_form', 10 );
+
+function rq_before_single_product(){
+    global $product;
+    global $rq_variations;
+    $variations = $product->get_available_variations();
+    $attributes = wp_list_pluck( $variations, 'attributes' );
+    $rq_variations = wp_list_pluck( $attributes, 'attribute_flavor' );
+    $variations_id = wp_list_pluck( $variations, 'variation_id' );
+}
+
+function rq_before_variations_form(){
+    global $rq_variations;
+    echo "<pre>";
+    var_dump($rq_variations);
+    echo "</pre>";
+}
